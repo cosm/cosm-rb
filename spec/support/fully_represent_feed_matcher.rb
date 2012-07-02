@@ -38,6 +38,9 @@ RSpec::Matchers.define :fully_represent_feed do |format, formatted_feed|
     feed.datastreams.each do |datastream|
       row = csv.detect {|d| d.first == datastream.id}
       datastream.current_value.should == row.last
+      if row.size == 3
+        datastream.updated.iso8601.should == row[1]
+      end
     end
   end
 

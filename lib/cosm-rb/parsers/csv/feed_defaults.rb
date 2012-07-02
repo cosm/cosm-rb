@@ -9,9 +9,13 @@ module Cosm
           hash = Hash.new
           if version == :v2
             hash["datastreams"] = array.collect {|row|
+              timestamp = {}
+              if row.size == 3
+                timestamp["updated"] = row[1]
+              end
               { "id" => row.first.to_s,
                 "current_value" => row.last.to_s
-              }
+              }.merge(timestamp)
             }
           elsif version == :v1
             hash["datastreams"] = []
