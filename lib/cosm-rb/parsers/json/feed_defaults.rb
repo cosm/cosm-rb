@@ -10,7 +10,7 @@ module Cosm
           case hash['version']
           when '1.0.0'
             transform_1_0_0(hash)
-          when '0.6-alpha'
+          when '0.6-alpha', '0.6'
             transform_0_6_alpha(hash)
           end
         end
