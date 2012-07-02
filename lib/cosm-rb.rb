@@ -4,7 +4,13 @@ if defined?(JRUBY_VERSION)
 else
   require 'yajl/json_gem'
 end
-require 'csv'
+
+if RUBY_VERSION.to_f < 1.9
+  require 'fastercsv'
+  CSV = FasterCSV
+else
+  require 'csv'
+end
 
 $:.unshift(File.dirname(File.expand_path(__FILE__)))
 
