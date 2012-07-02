@@ -4,7 +4,7 @@ module Cosm
       class UnknownVersionError < StandardError ; end
       module FeedDefaults
         def from_csv(csv, csv_version = nil)
-          array = ::CSV.parse(csv.strip)
+          array = Cosm::CSV.parse(csv.strip)
           version = detect_version(array, csv_version)
           hash = Hash.new
           if version == :v2

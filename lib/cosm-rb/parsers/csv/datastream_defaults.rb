@@ -3,7 +3,7 @@ module Cosm
     module CSV
       module DatastreamDefaults
         def from_csv(csv)
-          {"current_value" => ::CSV.parse(csv.strip).first.first.to_s}
+          {"current_value" => Cosm::CSV.parse(csv.strip).first.first.to_s}
         end
       end
     end
