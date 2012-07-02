@@ -5,8 +5,17 @@ require 'rspec'
 
 require 'time'
 
-if RUBY_VERSION < "1.9" && !defined?(JRUBY_VERSION)
-  require 'ruby-debug'
+if !defined?(JRUBY_VERSION)
+  if RUBY_VERSION < "1.9"
+    require 'ruby-debug'
+  else
+    if ENV["COVERAGE"] == "on"
+      require 'simplecov'
+      SimpleCov.start do
+        add_filter "/spec/"
+      end
+    end
+  end
 end
 
 Dir['./spec/support/**/*.rb'].map {|f| require f}
