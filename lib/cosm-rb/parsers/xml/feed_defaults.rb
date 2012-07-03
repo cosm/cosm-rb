@@ -28,7 +28,7 @@ module Cosm
           hash["website"] = environment.at_xpath("xmlns:website").content
           hash["email"] = environment.at_xpath("xmlns:email").content
           hash["private"] = environment.at_xpath("xmlns:private").content
-          hash["tags"] = environment.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}.join(',')
+          hash["tags"] = Cosm::CSV.generate_line(environment.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}).strip
           location = environment.at_xpath("xmlns:location")
           if location
             hash["location_name"] = location.at_xpath("xmlns:name").content
@@ -57,7 +57,7 @@ module Cosm
             end
             {
               "id" => datastream.attributes["id"].value,
-              "tags" => datastream.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}.join(','),
+              "tags" => Cosm::CSV.generate_line(datastream.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}).strip,
               "current_value" => current_value.content,
               "updated" => current_value.attributes["at"].value,
               "min_value" => datastream.at_xpath("xmlns:min_value").content,
@@ -111,7 +111,7 @@ module Cosm
             end
             {
               "id" => datastream.attributes["id"].value,
-              "tags" => datastream.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}.join(','),
+              "tags" => Cosm::CSV.generate_line(datastream.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}).strip,
               "current_value" => current_value.content,
               "updated" => environment.attributes["updated"].value,
               "min_value" => current_value.attributes["minValue"].value,
