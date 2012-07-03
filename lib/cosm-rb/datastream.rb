@@ -1,9 +1,7 @@
 module Cosm
   class Datastream
-    extend Cosm::AttrAccessors
-
     ALLOWED_KEYS = %w(feed_id id feed_creator current_value datapoints max_value min_value tags unit_label unit_symbol unit_type updated datapoints_function)
-    ALLOWED_KEYS.each { |key| stripped_attr_accessor(key.to_sym) }
+    ALLOWED_KEYS.each { |key| attr_accessor(key.to_sym) }
     VALID_UNIT_TYPES = %w(basicSI derivedSI conversionBasedUnits derivedUnits contextDependentUnits)
 
     include Cosm::Helpers

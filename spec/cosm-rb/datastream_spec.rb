@@ -104,14 +104,6 @@ describe Cosm::Datastream do
       end
     end
 
-    (Cosm::Datastream::ALLOWED_KEYS - ["datapoints"]).each do |attribute|
-      it "should strip white space from #{attribute}" do
-        datastream = Cosm::Datastream.new
-        datastream.send(:"#{attribute}=", "   stripped    \n")
-        datastream.send(:"#{attribute}").should == "stripped"
-      end
-    end
-
     %w(xml json hash csv).each do |format|
       it "should accept #{format}" do
         datastream = Cosm::Datastream.new(datastream_as_(format.to_sym))
