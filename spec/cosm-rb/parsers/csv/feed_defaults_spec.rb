@@ -30,6 +30,18 @@ describe "default feed csv parser" do
       feed = Cosm::Feed.new(csv, :v1)
       feed.should fully_represent_feed(:csv_v1, csv)
     end
+
+    it "should raise an error if passed some wild csv with more than max permitted three columns" do
+      csv =<<-CSV
+Date-Time, System HOA,Jockey Pump HOA,VFD Pump HOA,Lag Pump HOA,Lag Pump 2 HOA,Power Monitor,Water Level Relay,High Discharge Pressure,Reset Function,Jockey Running,VFD Run,Lag Pump Run,VFD Fault,Filter In Auto,Filter In Hand,Differential Press 1,Filter 1 Running,High Limit Switch,Low Limit Switch,Lag Pump Running,VFD Run Output Auto,VFD Pump On,Lag Pump,Lag Pump 1 On,System Auto Mode,Fault,Lag Pump 2 Run,Jockey On,Jockey Pump Run,Lag Pump 2,Filter Forward,Filter Reverse,Filter Solenoid,Pressure,Flow,Unknown?,VFD Input,VFD Output,
+2009;Apr;19;12;44;15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 
+2009;Apr;19;12;44;30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 
+2009;Apr;19;12;48;52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 
+CSV
+      expect {
+        Cosm::Feed.new(csv)
+      }.to raise_error(Cosm::Parsers::CSV::InvalidCSVError)
+    end
   end
 end
 

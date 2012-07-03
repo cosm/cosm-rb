@@ -2,12 +2,14 @@ module Cosm
   module Parsers
     module CSV
       class UnknownVersionError < StandardError ; end
+      class InvalidCSVError < StandardError ; end
       module FeedDefaults
         def from_csv(csv, csv_version = nil)
           array = Cosm::CSV.parse(csv.strip)
           version = detect_version(array, csv_version)
           hash = Hash.new
           if version == :v2
+            raise InvalidCSVError if array.sort { |a,b| a.length <=> b.length }.reverse.first.length > 3
             hash["datastreams"] = array.collect {|row|
               timestamp = {}
               if row.size == 3
