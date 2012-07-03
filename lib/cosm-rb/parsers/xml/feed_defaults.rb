@@ -45,6 +45,14 @@ module Cosm
           end
           hash["datastreams"] = environment.xpath("xmlns:data").collect do |datastream|
             current_value = datastream.at_xpath("xmlns:current_value")
+            if current_value
+              value_hash = {
+                "current_value" => current_value.content,
+                "updated" => current_value.attributes["at"].value,
+              }
+            else
+              value_hash = {}
+            end
             unit = datastream.at_xpath("xmlns:unit")
             if unit
               unit_hash = {
@@ -58,8 +66,6 @@ module Cosm
             {
               "id" => datastream.attributes["id"].value,
               "tags" => Cosm::CSV.generate_line(datastream.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}).strip,
-              "current_value" => current_value.content,
-              "updated" => current_value.attributes["at"].value,
               "min_value" => datastream.at_xpath("xmlns:min_value").content,
               "max_value" => datastream.at_xpath("xmlns:max_value").content,
               "datapoints" => datastream.xpath("xmlns:datapoints").collect do |datapoint|
@@ -69,7 +75,7 @@ module Cosm
                 "value" => value.content,
               }
               end
-            }.merge(unit_hash)
+            }.merge(value_hash).merge(unit_hash)
           end
           hash
         end
