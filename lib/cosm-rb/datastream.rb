@@ -1,7 +1,9 @@
 module Cosm
   class Datastream
+    extend Cosm::AttrAccessors
+
     ALLOWED_KEYS = %w(feed_id id feed_creator current_value datapoints max_value min_value tags unit_label unit_symbol unit_type updated datapoints_function)
-    ALLOWED_KEYS.each { |key| attr_accessor(key.to_sym) }
+    ALLOWED_KEYS.each { |key| stripped_attr_accessor(key.to_sym) }
     VALID_UNIT_TYPES = %w(basicSI derivedSI conversionBasedUnits derivedUnits contextDependentUnits)
 
     include Cosm::Helpers
@@ -13,16 +15,6 @@ module Cosm
     include Cosm::Parsers::CSV::DatastreamDefaults
 
     include Validations
-    # validate :before, :join_tags
-
-    # validates_presence_of :id
-    # validates_length_of :current_value, :maximum => 255
-    # validates_length_of :tags, :maximum => 255
-    # validates_inclusion_of :unit_type, :in => VALID_UNIT_TYPES,
-    #                                    :allow_nil => true,
-    #                                    :message => "is not a valid unit_type (pick one from #{VALID_UNIT_TYPES} or leave blank)"
-    # validates_format_of :id, :with => /\A[\w\-\+\.]+\Z/
-    #
 
     def valid?
       pass = true

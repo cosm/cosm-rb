@@ -93,6 +93,7 @@ describe Cosm::Datastream do
         @datastream.errors[:unit_type].should == ["is not a valid unit_type (pick one from #{Cosm::Datastream::VALID_UNIT_TYPES.join(', ')} or leave blank)"]
       end
     end
+
   end
 
   describe "#initialize" do
@@ -100,6 +101,14 @@ describe Cosm::Datastream do
       datastream = Cosm::Datastream.new
       Cosm::Datastream::ALLOWED_KEYS.each do |attr|
         datastream.attributes[attr.to_sym].should be_nil
+      end
+    end
+
+    (Cosm::Datastream::ALLOWED_KEYS - ["datapoints"]).each do |attribute|
+      it "should strip white space from #{attribute}" do
+        datastream = Cosm::Datastream.new
+        datastream.send(:"#{attribute}=", "   stripped    \n")
+        datastream.send(:"#{attribute}").should == "stripped"
       end
     end
 

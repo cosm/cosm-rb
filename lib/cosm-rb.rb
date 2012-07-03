@@ -17,6 +17,7 @@ $:.unshift(File.dirname(File.expand_path(__FILE__)))
 
 $KCODE = 'u' if RUBY_VERSION.to_f < 1.9
 
+require 'cosm-rb/attr_accessors'
 require 'cosm-rb/helpers'
 require 'cosm-rb/base'
 require 'cosm-rb/validations'
