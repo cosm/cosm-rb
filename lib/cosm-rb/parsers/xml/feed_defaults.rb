@@ -1,13 +1,14 @@
 module Cosm
   module Parsers
     module XML
+      class InvalidXMLError < StandardError; end
       module FeedDefaults
         def from_xml(xml)
           xml = Nokogiri.parse(xml)
           case xml.root.attributes["version"].value
           when "0.5.1"
             transform_0_5_1(xml)
-          else # "5"
+          else
             transform_5(xml)
           end
         end
@@ -16,6 +17,7 @@ module Cosm
         def transform_0_5_1(xml)
           hash = {}
           environment = xml.at_xpath("//xmlns:environment")
+          raise InvalidXMLError, "Missing 'environment' node from base node" if environment.nil?
           hash["updated"] = environment.attributes["updated"].value
           hash["created"] = environment.attributes["created"].value
           hash["creator"] = environment.attributes["creator"].value
@@ -84,6 +86,7 @@ module Cosm
         def transform_5(xml)
           hash = {}
           environment = xml.at_xpath("//xmlns:environment")
+          raise InvalidXMLError, "Missing 'environment' node from base node" if environment.nil?
           hash["updated"] = environment.attributes["updated"].value
           hash["creator"] = "http://www.haque.co.uk"
           hash["title"] = environment.at_xpath("xmlns:title").content
