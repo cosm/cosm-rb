@@ -9,7 +9,7 @@ module Cosm
           version = detect_version(array, csv_version)
           hash = Hash.new
           if version == :v2
-            raise InvalidCSVError if array.sort { |a,b| a.length <=> b.length }.reverse.first.length > 3
+            raise InvalidCSVError, "CSV is invalid. Incorrect number of fields" if array.sort { |a,b| a.length <=> b.length }.reverse.first.length > 3
             hash["datastreams"] = array.collect {|row|
               timestamp = {}
               if row.size == 3
