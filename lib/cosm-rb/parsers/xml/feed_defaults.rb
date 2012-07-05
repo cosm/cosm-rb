@@ -30,7 +30,9 @@ module Cosm
           hash["website"] = environment.at_xpath("xmlns:website").content
           hash["email"] = environment.at_xpath("xmlns:email").content
           hash["private"] = environment.at_xpath("xmlns:private").content
-          hash["tags"] = Cosm::CSV.generate_line(environment.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}).strip
+          if (tags = environment.xpath("xmlns:tag").collect(&:content)).any?
+            hash["tags"] = Cosm::CSV.generate_line(environment.xpath("xmlns:tag").collect { |t| t.content.strip }.sort{|a,b| a.downcase <=> b.downcase}).strip
+          end
           location = environment.at_xpath("xmlns:location")
           if location
             hash["location_name"] = location.at_xpath("xmlns:name").content

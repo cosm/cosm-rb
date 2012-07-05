@@ -63,7 +63,9 @@ RSpec::Matchers.define :fully_represent_feed do |format, formatted_feed|
       feed.website.should == environment.at_xpath("xmlns:website").content
       feed.email.should == environment.at_xpath("xmlns:email").content
       feed.private.should == environment.at_xpath("xmlns:private").content
-      feed.tags.should == environment.xpath("xmlns:tag").map(&:content).sort{|a,b| a.downcase<=>b.downcase}.join(',')
+      if feed.tags
+        feed.tags.should == environment.xpath("xmlns:tag").map(&:content).sort{|a,b| a.downcase<=>b.downcase}.join(',')
+      end
       owner = environment.at_xpath("xmlns:user")
       if owner
         feed.owner_login.should == owner.at_xpath("xmlns:login").content
