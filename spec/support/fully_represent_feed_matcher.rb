@@ -14,7 +14,7 @@ RSpec::Matchers.define :fully_represent_feed do |format, formatted_feed|
   end
 
   failure_message_for_should do |feed|
-    "expected #{feed} to fully represent #{formatted_feed}"
+    "expected #{feed.attributes.inspect} to fully represent #{formatted_feed}"
   end
 
   description do
@@ -83,7 +83,9 @@ RSpec::Matchers.define :fully_represent_feed do |format, formatted_feed|
       feed.datastreams.each do |ds|
         data = environment.at_xpath("xmlns:data[@id=\"#{ds.id}\"]")
         ds.id.should == data.attributes["id"].value
-        ds.tags.should == data.xpath("xmlns:tag").map(&:content).sort{|a,b| a.downcase<=>b.downcase}.join(',')
+        if (tags = data.xpath("xmlns:tag").collect { |t| t.content.strip }).any?
+          ds.tags.should == tags.sort{|a,b| a.downcase<=>b.downcase}.join(',')
+        end
         current_value = data.at_xpath("xmlns:current_value")
         ds.current_value.should == current_value.content
         ds.updated.should == current_value.attributes["at"].value
@@ -125,7 +127,9 @@ RSpec::Matchers.define :fully_represent_feed do |format, formatted_feed|
       feed.datastreams.each do |ds|
         data = environment.at_xpath("xmlns:data[@id=\"#{ds.id}\"]")
         ds.id.should == data.attributes["id"].value
-        ds.tags.should == data.xpath("xmlns:tag").map(&:content).sort{|a,b| a.downcase<=>b.downcase}.join(',')
+        if (tags = data.xpath("xmlns:tag").collect { |t| t.content.strip }).any?
+          ds.tags.should == tags.sort{ |a,b| a.downcase <=> b.downcase }.join(',')
+        end
         current_value = data.at_xpath("xmlns:value")
         ds.current_value.should == current_value.content
         ds.updated.should == environment.attributes["updated"].value

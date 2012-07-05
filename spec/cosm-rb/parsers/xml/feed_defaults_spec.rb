@@ -69,6 +69,7 @@ EOXML
 
     it "should handle missing value attributes" do
       @xml = feed_as_(:xml, :version => "5", :except_node => :value_attributes)
+      feed = Cosm::Feed.new(@xml)
       Cosm::Feed.new(@xml).should fully_represent_feed(:xml, @xml)
     end
 
@@ -84,6 +85,31 @@ EOXML
       }.to raise_error(Cosm::Parsers::XML::InvalidXMLError)
     end
 
+    it "should gracefully handle our oddly whitespaced real example" do
+      xml = <<-EOXML
+<?xml version="1.0" encoding="UTF-8"?>
+<eeml version="5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.eeml.org/xsd/005" xsi:schemaLocation="http://www.eeml.org/xsd/005 http://www.eeml.org/xsd/005/005.xsd">
+  <environment>
+    <data id="4773635294300160">
+      <tag>
+        10.F59894010800</tag>
+      <tag>
+        Living Room, S wall</tag>
+      <value>
+        24.1875</value>
+      <unit type="derivedSI">
+        celsius</unit>
+    </data>
+  </environment>
+</eeml>
+EOXML
+      feed = Cosm::Feed.new(xml)
+
+      datastream = feed.datastreams.first
+      datastream.tags.should == "10.F59894010800,\"Living Room, S wall\""
+      datastream.current_value.should == "24.1875"
+      datastream.unit_label.should == "celsius"
+    end
   end
 end
 
