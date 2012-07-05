@@ -23,36 +23,34 @@ module Cosm
           hash["created"] = hash["created"]
           hash["status"] = hash["status"]
           hash["tags"] = join_tags(hash["tags"])
-          if hash["datastreams"]
-            hash["datastreams"] = hash["datastreams"].collect do |datastream|
-              unit_hash = {}
-              if unit = datastream.delete('unit')
-                unit_hash['unit_type'] = unit['type']
-                unit_hash['unit_symbol'] = unit['symbol']
-                unit_hash['unit_label'] = unit['label']
-              end
-              {
-                "id" => datastream["id"],
-                "current_value" => datastream["current_value"],
-                "min_value" => datastream["min_value"],
-                "max_value" => datastream["max_value"],
-                "updated" => datastream["at"],
-                "tags" => join_tags(datastream["tags"]),
-                "datapoints" => setup_datapoints(datastream["datapoints"])
-              }.merge(unit_hash)
-            end if hash["datastreams"]
-            if location = hash.delete("location")
-              hash["location_disposition"] = location["disposition"]
-              hash["location_domain"] = location["domain"]
-              hash["location_ele"] = location["ele"]
-              hash["location_exposure"] = location["exposure"]
-              hash["location_lat"] = location["lat"]
-              hash["location_lon"] = location["lon"]
-              hash["location_name"] = location["name"]
+          hash["datastreams"] = hash["datastreams"].collect do |datastream|
+            unit_hash = {}
+            if unit = datastream.delete('unit')
+              unit_hash['unit_type'] = unit['type']
+              unit_hash['unit_symbol'] = unit['symbol']
+              unit_hash['unit_label'] = unit['label']
             end
-            if owner = hash.delete("user")
-              hash["owner_login"] = owner["login"]
-            end
+            {
+              "id" => datastream["id"],
+              "current_value" => datastream["current_value"],
+              "min_value" => datastream["min_value"],
+              "max_value" => datastream["max_value"],
+              "updated" => datastream["at"],
+              "tags" => join_tags(datastream["tags"]),
+              "datapoints" => setup_datapoints(datastream["datapoints"])
+            }.merge(unit_hash)
+          end if hash["datastreams"]
+          if location = hash.delete("location")
+            hash["location_disposition"] = location["disposition"]
+            hash["location_domain"] = location["domain"]
+            hash["location_ele"] = location["ele"]
+            hash["location_exposure"] = location["exposure"]
+            hash["location_lat"] = location["lat"]
+            hash["location_lon"] = location["lon"]
+            hash["location_name"] = location["name"]
+          end
+          if owner = hash.delete("user")
+            hash["owner_login"] = owner["login"]
           end
           hash
         end
