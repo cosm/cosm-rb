@@ -63,7 +63,7 @@ module Cosm
                 "unit_label" => strip(unit.content),
                 "unit_type" => unit.attributes["type"].value,
                 "unit_symbol" => unit.attributes["symbol"].value,
-              }.delete_if { |k,v| v.nil? }
+              }
             else
               unit_hash = {}
             end

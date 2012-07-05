@@ -8,6 +8,12 @@ describe "default feed csv parser" do
       feed.should fully_represent_feed(:csv_v2, csv)
     end
 
+    it "should convert no timestamp v2 CSV into attributes hash" do
+      csv = feed_as_(:csv, :version => 'v2_notimestamp')
+      feed = Cosm::Feed.new(csv)
+      feed.should fully_represent_feed(:csv_v2, csv)
+    end
+
     it "should convert Pachube CSV v1 into attributes hash" do
       csv = feed_as_(:csv, :version => 'v1')
       feed = Cosm::Feed.new(csv)
