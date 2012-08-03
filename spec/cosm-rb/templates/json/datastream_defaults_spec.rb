@@ -97,6 +97,24 @@ describe "default datastream json templates" do
       json[:unit][:label].should == ''
       json[:unit][:symbol].should == ''
     end
+
+    it "should not show data_type if it is blank" do
+      @datastream.data_type = nil
+      json = @datastream.generate_json("1.0.0")
+      json[:unit].keys.should_not include "data_type"
+    end
+
+    it "should not show data_type if it is default" do
+      @datastream.data_type = Cosm::Datastream::DataType::DEFAULT
+      json = @datastream.generate_json("1.0.0")
+      json[:unit].keys.should_not include "data_type"
+    end
+
+    it "should show data_type if it is not default" do
+      @datastream.data_type = Cosm::Datastream::DataType::INTEGER
+      json = @datastream.generate_json("1.0.0")
+      json[:unit][:data_type].should == 'integer'
+    end
   end
 
   context "0.6-alpha (used by API V1)" do

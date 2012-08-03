@@ -19,6 +19,7 @@ module Cosm
           template.id
           template.version {"1.0.0"}
           template.at {updated.iso8601(6)}
+          template.data_type
           template.current_value
           template.max_value {max_value.to_s}
           template.min_value {min_value.to_s}
