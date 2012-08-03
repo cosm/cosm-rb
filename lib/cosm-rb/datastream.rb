@@ -1,8 +1,19 @@
 module Cosm
   class Datastream
-    ALLOWED_KEYS = %w(feed_id id feed_creator current_value datapoints max_value min_value tags unit_label unit_symbol unit_type updated datapoints_function)
+    ALLOWED_KEYS = %w(feed_id id feed_creator current_value datapoints max_value min_value tags unit_label unit_symbol unit_type updated datapoints_function data_type)
     ALLOWED_KEYS.each { |key| attr_accessor(key.to_sym) }
     VALID_UNIT_TYPES = %w(basicSI derivedSI conversionBasedUnits derivedUnits contextDependentUnits)
+
+    module DataType
+      DEFAULT = "default"
+      STRING = "string"
+      INTEGER = "integer"
+      FLOAT = "float"
+      PERCENTAGE = "percentage"
+      BOOLEAN = "boolean"
+    end
+
+    DATA_TYPES = [DataType::DEFAULT, DataType::STRING, DataType::INTEGER, DataType::FLOAT, DataType::PERCENTAGE, DataType::BOOLEAN]
 
     include Cosm::Helpers
     include Cosm::Templates::JSON::DatastreamDefaults
