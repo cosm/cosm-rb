@@ -16,3 +16,12 @@ A working example using this gem can be found [here](https://github.com/levent/c
 This gem will convert between Cosm Data Formats.
 You can use it to prepare data for sending to Cosm or for parsing data received from Cosm.
 
+## Developer Notes
+
+To bootstrap your development environment execute:
+
+    $ ./bin/bootstrap
+
+To run the tests execute:
+
+    $ ./bin/test
